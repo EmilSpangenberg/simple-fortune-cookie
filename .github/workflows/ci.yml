@@ -1,0 +1,51 @@
+name: CI
+on:
+  push:
+    branches-ignore:
+      - main
+jobs:
+  Clone:
+    name: Clone Repository
+    runs-on: ubuntu-latest
+    container: goland:1.21.0
+    steps:
+    - uses: actions/checkout@v3
+    - name: Upload Repo as Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: code
+        path: .
+  Build:
+    runs-on: ubuntu-latest
+    needs: Clone
+    steps:
+      - name: Download Code
+        uses: actions/download-artifact@v3
+        with:
+          name: code
+          path: .
+      - name: Build Docker Compose
+        run: docker compose build
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+            name: code
+            path: .
+  Test_Frontend:
+    runs-on: ubuntu-latest
+    needs: Clone
+    container:
+      image: golang:1.21.0
+    steps:
+      - name: Download Code
+        uses: actions/download-artifact@v3
+        with:
+          name: code
+          path: .
+      - name: Test
+        run: cd ./frontend && go test
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: code
+          path: .
