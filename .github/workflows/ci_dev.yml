@@ -63,6 +63,8 @@ jobs:
         run: echo "${{ secrets.KUBECONFIG }}" | base64 -d > kubeconfig
       - name: ls
         run: ls -la
+      - run: kubectl --kubeconfig kubeconfig delete -f k8s/.
+      - run: kubectl --kubeconfig kubeconfig get services 
       - name: Deploy
         run: kubectl --kubeconfig kubeconfig apply -f k8s/.
       - run: kubectl --kubeconfig kubeconfig get pods
