@@ -50,24 +50,3 @@ jobs:
           name: code
           path: .
 
-  Deploy:
-    runs-on: ubuntu-latest
-    needs: Clone
-    steps:
-      - name: Download Code
-        uses: actions/download-artifact@v3
-        with:
-          name: code
-          path: .
-      - name: Set Kubeconfig
-        run: echo "${{ secrets.KUBECONFIG }}" | base64 -d > kubeconfig
-      - name: ls
-        run: ls -la
-      - run: kubectl --kubeconfig kubeconfig delete -f k8s/.
-      - run: kubectl --kubeconfig kubeconfig get services 
-      - name: Deploy
-        run: kubectl --kubeconfig kubeconfig apply -f k8s/.
-      - run: kubectl --kubeconfig kubeconfig get pods
-      - run: kubectl --kubeconfig kubeconfig get nodes -o wide
-      - run: kubectl --kubeconfig kubeconfig get services 
-
