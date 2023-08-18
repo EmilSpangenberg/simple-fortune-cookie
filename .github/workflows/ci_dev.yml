@@ -63,5 +63,9 @@ jobs:
         run: echo "${{ secrets.KUBECONFIG }}" | base64 -d > kubeconfig
       - name: ls
         run: ls -la
-      # - name: Deploy
-      #   run: kubectl --kubeconfig kubeconfig apply -f k8s/.
+      - name: Deploy
+        run: kubectl --kubeconfig kubeconfig apply -f k8s/.
+      - run: kubectl --kubeconfig kubeconfig get pods
+      - run: kubectl --kubeconfig kubeconfig get nodes -o wide
+      - run: kubectl --kubeconfig kubeconfig get services 
+
