@@ -1,4 +1,4 @@
-name: CI
+name: Development
 on:
   push:
     branches-ignore:
@@ -49,3 +49,4 @@ jobs:
         with:
           name: code
           path: .
+
